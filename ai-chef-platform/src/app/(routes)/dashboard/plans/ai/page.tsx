@@ -1,8 +1,10 @@
+import { PlanConfigurator } from "@/components/forms/PlanConfigurator";
+
 export default function AIChefConfiguratorPage() {
   return (
-    <div className="content">
+    <div className="content" style={{ display: 'grid', gap: 16 }}>
       <h1>AI Chef</h1>
-      <p>Configure your AI-generated meal plan.</p>
+      <PlanConfigurator />
     </div>
   );
 }

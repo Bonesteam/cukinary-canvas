@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 export function Header() {
   return (
@@ -14,6 +15,10 @@ export function Header() {
           <Link href="/(routes)/dashboard/plans/personal">Personal Chef</Link>
           <Link href="/(routes)/about">About</Link>
         </nav>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ color: 'var(--color-muted)', fontSize: 12 }}>GBP ↔ EUR</div>
+          <LanguageSwitcher />
+        </div>
       </div>
     </header>
   );

@@ -1,4 +1,4 @@
-export type UserRole = "customer" | "chef" | "admin";
+export type UserRole = "customer" | "chef";
 
 export interface AppUser {
   _id: string;
