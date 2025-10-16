@@ -1,0 +1,43 @@
+@use "../assets/styles/variables" as *;
+@use "../assets/styles/mixins" as *;
+
+:root {
+  --color-bg: #0b0c10;
+  --color-surface: #12141a;
+  --color-border: #242736;
+  --color-text: #e6e8ef;
+  --color-muted: #aab0c0;
+  --primary: #55c27d;
+  --primary-contrast: #0b0c10;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+.header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(18,20,26,0.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.4px; }
+.nav { display: flex; align-items: center; gap: 12px; }
+
+.sidebar { width: 260px; border-right: 1px solid var(--color-border); background: var(--color-surface); height: 100vh; position: sticky; top: 64px; padding: 16px; }
+.main { display: flex; gap: 24px; }
+.content { flex: 1; padding: 24px; }
+
+.button { background: var(--primary); color: var(--primary-contrast); padding: 10px 16px; border: 0; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.button.ghost { background: transparent; color: var(--color-text); border: 1px solid var(--color-border); }
+.card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 16px; }
+
+.footer { border-top: 1px solid var(--color-border); padding: 24px 0; color: var(--color-muted); }
