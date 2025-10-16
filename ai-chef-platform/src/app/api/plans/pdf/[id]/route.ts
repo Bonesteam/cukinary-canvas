@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
+import { connectToDatabase } from "@/backend/db/connect";
+import MealPlan from "@/backend/models/MealPlan";
+import { generatePlanPdf } from "@/backend/services/pdf.service";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  // Placeholder PDF; in Phase 2 we'll generate with pdf-lib
-  const pdfBytes = new Uint8Array([37,80,68,70,45]); // %PDF-
+  await connectToDatabase();
+  const plan = await MealPlan.findById(id).lean();
+  const content = (plan as any)?.config?.result || "No content";
+  const title = `Meal Plan #${id}`;
+  const pdfBytes = await generatePlanPdf(title, content);
   return new NextResponse(pdfBytes, {
     status: 200,
     headers: {

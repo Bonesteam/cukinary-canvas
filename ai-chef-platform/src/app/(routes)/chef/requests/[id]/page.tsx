@@ -1,37 +1,35 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-type Message = { _id: string; text: string; fromUserId: string; toUserId?: string; createdAt: string };
-
-export default function MessagesPage() {
-  const [roomId] = useState("demo-room");
-  const [messages, setMessages] = useState<Message[]>([]);
+export default function ChefRequestChatPage() {
+  const params = useParams<{ id: string }>();
+  const roomId = params.id;
+  const { data: session } = useSession();
+  type Msg = { _id: string; text: string; createdAt: string };
+  const [messages, setMessages] = useState<Msg[]>([]);
   const [text, setText] = useState("");
 
   const load = async () => {
-    const res = await fetch(`/api/messages/${roomId}`);
-    const data = await res.json();
-    setMessages(data.messages ?? []);
+    const r = await fetch(`/api/messages/${roomId}`);
+    const d = await r.json();
+    setMessages(d.messages || []);
   };
-
   useEffect(() => { load(); }, [roomId]);
 
   const send = async () => {
-    if (!text) return;
-    await fetch(`/api/messages/${roomId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fromUserId: "guest-demo", text }),
-    });
+    const fromUserId = (session as { userId?: string } | null)?.userId || 'chef-demo';
+    await fetch(`/api/messages/${roomId}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fromUserId, text }) });
     setText("");
     await load();
   };
 
   return (
     <div className="content" style={{ display: 'grid', gap: 12 }}>
-      <h1>Messages</h1>
-      <div className="card" style={{ height: 280, overflowY: 'auto', display: 'grid', gap: 8 }}>
-        {messages.map(m => (
+      <h1>Request Chat</h1>
+      <div className="card" style={{ height: 320, overflowY: 'auto', display: 'grid', gap: 8 }}>
+        {messages.map((m) => (
           <div key={m._id} style={{ padding: 8, border: '1px solid var(--color-border)', borderRadius: 8 }}>
             <div style={{ fontSize: 12, color: 'var(--color-muted)' }}>{new Date(m.createdAt).toLocaleString()}</div>
             <div>{m.text}</div>

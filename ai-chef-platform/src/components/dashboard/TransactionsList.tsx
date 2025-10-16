@@ -10,7 +10,7 @@ export function TransactionsList() {
   const [txs, setTxs] = useState<Tx[]>([]);
 
   useEffect(() => {
-    const email = (session as any)?.user?.email || (session as any)?.email;
+    const email = session?.user?.email ?? null;
     if (!email) return;
     fetch(`/api/transactions?email=${encodeURIComponent(email)}`).then(r => r.json()).then(d => setTxs(d.transactions || [])).catch(() => setTxs([]));
   }, [session]);

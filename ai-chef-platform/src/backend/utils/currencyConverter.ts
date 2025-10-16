@@ -5,7 +5,22 @@ const GBP_TO_EUR_DEFAULT = 1.15;
 export type Rates = { GBP: number; EUR: number };
 
 export async function getRates(): Promise<Rates> {
-  // Placeholder: in production fetch from a rates API
+  try {
+    const res = await fetch("https://open.er-api.com/v6/latest/GBP", { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      const eur = data?.rates?.EUR;
+      if (typeof eur === 'number' && eur > 0) return { GBP: 1, EUR: eur };
+    }
+  } catch {}
+  try {
+    const res = await fetch("https://api.exchangerate.host/latest?base=GBP&symbols=EUR", { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      const eur = data?.rates?.EUR;
+      if (typeof eur === 'number' && eur > 0) return { GBP: 1, EUR: eur };
+    }
+  } catch {}
   return { GBP: 1, EUR: GBP_TO_EUR_DEFAULT };
 }
 

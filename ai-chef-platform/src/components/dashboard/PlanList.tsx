@@ -9,7 +9,7 @@ export function PlanList() {
   const { data: session } = useSession();
   const [plans, setPlans] = useState<Plan[]>([]);
   useEffect(() => {
-    const email = (session as any)?.user?.email || (session as any)?.email;
+    const email = session?.user?.email ?? null;
     if (!email) return;
     fetch(`/api/plans?email=${encodeURIComponent(email)}`).then(r => r.json()).then(d => setPlans(d.plans || [])).catch(() => setPlans([]));
   }, [session]);

@@ -7,7 +7,7 @@ export function TokenBalanceCard() {
   const { data: session } = useSession();
   const [balance, setBalance] = useState<number | null>(null);
   useEffect(() => {
-    const email = (session as any)?.user?.email || (session as any)?.email;
+    const email = session?.user?.email ?? null;
     if (!email) return;
     fetch(`/api/tokens/balance?email=${encodeURIComponent(email)}`).then(r => r.json()).then(d => setBalance(d.tokens)).catch(() => setBalance(0));
   }, [session]);
