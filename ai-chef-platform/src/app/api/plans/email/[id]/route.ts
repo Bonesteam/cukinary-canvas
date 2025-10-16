@@ -4,9 +4,9 @@ import MealPlan from "@/backend/models/MealPlan";
 import { generatePlanPdf } from "@/backend/services/pdf.service";
 import { sendPlanEmail } from "@/backend/services/email.service";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await connectToDatabase();
-  const { id } = params;
+  const { id } = await params;
   const { to } = await req.json();
   const plan = (await MealPlan.findById(id).lean()) as { config?: { result?: string } } | null;
   if (!plan) return NextResponse.json({ error: 'Not found' }, { status: 404 });

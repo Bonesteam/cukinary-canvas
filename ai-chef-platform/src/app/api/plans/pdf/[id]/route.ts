@@ -3,6 +3,8 @@ import { connectToDatabase } from "@/backend/db/connect";
 import MealPlan from "@/backend/models/MealPlan";
 import { generatePlanPdf } from "@/backend/services/pdf.service";
 
+export const runtime = "nodejs";
+
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   await connectToDatabase();
@@ -10,7 +12,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const content = plan?.config?.result || "No content";
   const title = `Meal Plan #${id}`;
   const pdfBytes = await generatePlanPdf(title, content);
-  return new NextResponse(pdfBytes, {
+  // Use Node Buffer for response body in node runtime
+  return new NextResponse(Buffer.from(pdfBytes), {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
