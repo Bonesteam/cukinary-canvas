@@ -13,7 +13,7 @@ export default function SignInPage() {
     setLoading(true);
     const res = await signIn("credentials", { email, redirect: false });
     setLoading(false);
-    if (res?.ok) router.push("/(routes)/dashboard");
+    if (res?.ok) router.push("/dashboard");
     else alert("Sign-in failed");
   };
 

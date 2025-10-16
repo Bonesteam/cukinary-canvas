@@ -17,12 +17,12 @@ export function Header() {
           <Link href="/">AI Chef</Link>
         </div>
         <nav className="nav">
-          <Link href="/(routes)/dashboard">Dashboard</Link>
-          <Link href="/(routes)/dashboard/tokens">Tokens</Link>
-          <Link href="/(routes)/dashboard/plans/ai">AI Chef</Link>
-          <Link href="/(routes)/dashboard/plans/personal">Personal Chef</Link>
-          <Link href="/(routes)/about">About</Link>
-          {session?.role === 'chef' && <Link href="/(routes)/chef">Chef</Link>}
+          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/dashboard/tokens">Tokens</Link>
+          <Link href="/dashboard/plans/ai">AI Chef</Link>
+          <Link href="/dashboard/plans/personal">Personal Chef</Link>
+          <Link href="/about">About</Link>
+          {session?.role === 'chef' && <Link href="/chef">Chef</Link>}
         </nav>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ color: 'var(--color-muted)', fontSize: 12 }}>GBP/EUR {eur ? eur.toFixed(2) : '—'}</div>
@@ -33,7 +33,7 @@ export function Header() {
               <button className="button ghost" onClick={() => signOut({ callbackUrl: '/' })}>Sign out</button>
             </>
           ) : (
-            <button className="button ghost" onClick={() => signIn(undefined, { callbackUrl: '/(routes)/dashboard' })}>Sign in</button>
+            <button className="button ghost" onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}>Sign in</button>
           )}
         </div>
       </div>

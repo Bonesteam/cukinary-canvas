@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
     const role = (token as { role?: string } | null)?.role;
     if (!token || role !== "chef") {
       const url = req.nextUrl.clone();
-      url.pathname = "/(routes)/dashboard";
+      url.pathname = "/dashboard";
       return NextResponse.redirect(url);
     }
   }

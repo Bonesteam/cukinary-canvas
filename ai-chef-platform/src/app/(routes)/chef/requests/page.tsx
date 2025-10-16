@@ -30,7 +30,7 @@ export default function ChefRequestsPage() {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               {!req.assignedChefId && <button className="button" onClick={() => assignToMe(req._id)}>Assign to me</button>}
-              <Link className="button ghost" href={`/(routes)/chef/requests/${req._id}`}>Open</Link>
+              <Link className="button ghost" href={`/chef/requests/${req._id}`}>Open</Link>
             </div>
           </div>
         ))}

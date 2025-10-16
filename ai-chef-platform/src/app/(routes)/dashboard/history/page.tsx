@@ -11,7 +11,7 @@ export default async function HistoryPage() {
       <div className="card">
         <h3>Meal Plans</h3>
         <p>Plans endpoint stubbed. This will show latest plans with links to PDF.</p>
-        <Link href="/(routes)/dashboard/plans/ai" className="button">Create AI Plan</Link>
+        <Link href="/dashboard/plans/ai" className="button">Create AI Plan</Link>
       </div>
       <div className="card">
         <h3>Transactions</h3>
