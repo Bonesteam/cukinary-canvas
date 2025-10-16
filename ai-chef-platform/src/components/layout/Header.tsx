@@ -1,7 +1,13 @@
+"use client";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { useEffect, useState } from "react";
 
 export function Header() {
+  const [eur, setEur] = useState<number | null>(null);
+  useEffect(() => {
+    fetch('/api/rates').then(r => r.json()).then(d => setEur(d.EUR)).catch(() => setEur(null));
+  }, []);
   return (
     <header className="header">
       <div className="container header-inner">
@@ -16,7 +22,7 @@ export function Header() {
           <Link href="/(routes)/about">About</Link>
         </nav>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ color: 'var(--color-muted)', fontSize: 12 }}>GBP ↔ EUR</div>
+          <div style={{ color: 'var(--color-muted)', fontSize: 12 }}>GBP/EUR {eur ? eur.toFixed(2) : '—'}</div>
           <LanguageSwitcher />
         </div>
       </div>

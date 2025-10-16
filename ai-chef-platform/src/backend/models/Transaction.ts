@@ -6,6 +6,7 @@ const TransactionSchema = new Schema({
   amountTokens: { type: Number, required: true },
   currency: { type: String, enum: ["GBP", "EUR"], default: "GBP" },
   amountCurrency: { type: Number },
+  status: { type: String, enum: ["pending", "completed", "failed"], default: "completed" },
   metadata: { type: Schema.Types.Mixed },
 }, { timestamps: true });
 

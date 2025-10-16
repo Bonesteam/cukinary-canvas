@@ -1,4 +1,5 @@
 import { PlanConfigurator } from "@/components/forms/PlanConfigurator";
+import "./styles.scss";
 
 export default function AIChefConfiguratorPage() {
   return (
