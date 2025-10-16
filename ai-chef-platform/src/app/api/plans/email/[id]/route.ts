@@ -8,9 +8,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   await connectToDatabase();
   const { id } = params;
   const { to } = await req.json();
-  const plan = await MealPlan.findById(id).lean();
+  const plan = (await MealPlan.findById(id).lean()) as { config?: { result?: string } } | null;
   if (!plan) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  const content = (plan as any)?.config?.result || "Meal plan";
+  const content = plan?.config?.result || "Meal plan";
   const pdf = await generatePlanPdf(`Meal Plan #${id}`, content);
   const res = await sendPlanEmail(to, `Your meal plan #${id}`, content, { filename: `plan-${id}.pdf`, data: Buffer.from(pdf) });
   return NextResponse.json(res);

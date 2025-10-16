@@ -8,7 +8,8 @@ export async function middleware(req: NextRequest) {
 
   // Protect chef routes: require role=chef
   if (pathname.startsWith("/chef")) {
-    if (!token || (token as any).role !== "chef") {
+    const role = (token as { role?: string } | null)?.role;
+    if (!token || role !== "chef") {
       const url = req.nextUrl.clone();
       url.pathname = "/(routes)/dashboard";
       return NextResponse.redirect(url);

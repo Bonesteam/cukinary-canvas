@@ -6,8 +6,8 @@ import { generatePlanPdf } from "@/backend/services/pdf.service";
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   await connectToDatabase();
-  const plan = await MealPlan.findById(id).lean();
-  const content = (plan as any)?.config?.result || "No content";
+  const plan = (await MealPlan.findById(id).lean()) as { config?: { result?: string } } | null;
+  const content = plan?.config?.result || "No content";
   const title = `Meal Plan #${id}`;
   const pdfBytes = await generatePlanPdf(title, content);
   return new NextResponse(pdfBytes, {
