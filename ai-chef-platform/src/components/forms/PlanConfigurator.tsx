@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useSession, signIn } from "next-auth/react";
 import { calculateTotalTokens, TokenCostItem } from "@/backend/utils/tokenCalculator";
 
 const GOALS: TokenCostItem[] = [
@@ -47,6 +48,10 @@ function Toggle({ item, onChange, selected }: { item: TokenCostItem; onChange: (
 
 export function PlanConfigurator() {
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  const [planId, setPlanId] = useState<string | null>(null);
+  const { data: session } = useSession();
 
   const items = [...GOALS, ...STRUCTURE, ...DIET, ...EXTRAS];
   const selectedItems = items.filter(i => selectedKeys.has(i.key));
@@ -56,6 +61,30 @@ export function PlanConfigurator() {
     const next = new Set(selectedKeys);
     if (checked) next.add(item.key); else next.delete(item.key);
     setSelectedKeys(next);
+  };
+
+  const generate = async () => {
+    if (!session?.userId) {
+      await signIn();
+      return;
+    }
+    setLoading(true);
+    setResult(null);
+    setPlanId(null);
+    const payload = {
+      userId: session.userId,
+      selections: selectedItems,
+      notes: "",
+    };
+    const res = await fetch("/api/plans/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (res.ok) {
+      setResult(data.result || "");
+      setPlanId(data.planId);
+    } else {
+      setResult(data.error || "Error generating plan");
+    }
+    setLoading(false);
   };
 
   return (
@@ -100,8 +129,18 @@ export function PlanConfigurator() {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <strong>Total: {total} tokens</strong>
-        <button className="button" type="button">Generate Plan</button>
+        <button className="button" type="button" onClick={generate} disabled={loading || total === 0}>{loading ? 'Generating…' : 'Generate Plan'}</button>
       </div>
+
+      {result && (
+        <div className="card" style={{ marginTop: 8 }}>
+          <h4>AI Plan Result</h4>
+          <pre style={{ whiteSpace: 'pre-wrap' }}>{result}</pre>
+          {planId && (
+            <a className="button" href={`/api/plans/pdf/${planId}`} style={{ marginTop: 8, display: 'inline-block' }}>Download PDF</a>
+          )}
+        </div>
+      )}
     </div>
   );
 }
