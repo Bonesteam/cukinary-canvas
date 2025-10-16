@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TokenBalanceCard } from "@/components/dashboard/TokenBalanceCard";
 import { PlanList } from "@/components/dashboard/PlanList";
+import { TransactionsList } from "@/components/dashboard/TransactionsList";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,7 @@ export default function DashboardPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           <TokenBalanceCard />
           <PlanList />
+          <TransactionsList />
         </div>
       </div>
     </div>
